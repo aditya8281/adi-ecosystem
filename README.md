@@ -1,61 +1,76 @@
-# ADI Auto-Dev — Portable AI Development Ecosystem
+# ADI Ecosystem
 
-> Clone → Install → Init → Full AI development ecosystem in any project.
+One command to deploy a full AI development ecosystem into any project.
 
-## What This Is
-
-A portable CLI that deploys 86 skills, 15 slash commands, 13 governance hooks, and full Claude Code configuration into any project with two commands.
-
-## Quick Start
+## Install
 
 ```bash
-# 1. Clone or copy this folder
-git clone <repo> && cd repo/adi-ecosystem
+curl -sSL https://raw.githubusercontent.com/aditya8281/adi-ecosystem/main/install.sh | bash
+```
 
-# 2. Install the CLI (one-time)
+Or from the repo:
+
+```bash
+git clone https://github.com/aditya8281/adi-ecosystem.git
+cd adi-ecosystem
 bash install.sh
-
-# 3. Deploy to your project
-cd /path/to/your/project
-adi-auto-dev init
-
-# 4. Start Claude Code — ecosystem is active
 ```
 
-## How It Works
+## Usage
 
-```
-install.sh  →  puts `adi-auto-dev` CLI on PATH + copies ecosystem data to ~/.adi-ecosystem
-adi-auto-dev init  →  detects project type + deploys everything into .claude/
-```
+```bash
+# Deploy to a project
+cd your-project
+adi-ecosystem init
 
-Two commands. That's it.
+# Start Claude Code
+claude
+
+# In Claude Code
+/project:start    # Session launcher
+/project:cortex   # Implementation workflow
+```
 
 ## Commands
 
-| Command | What It Does |
-|---------|--------------|
-| `adi-auto-dev init` | Deploy ecosystem to current project |
-| `adi-auto-dev init --global` | Make skills available in ALL projects |
-| `adi-auto-dev status` | Show what's deployed |
-| `adi-auto-dev remove` | Remove ecosystem from project |
-| `adi-auto-dev list` | Browse all 86 skills |
-| `adi-auto-dev --help` | Show help |
+| Command | Purpose |
+|---------|---------|
+| `adi-ecosystem init` | Deploy ecosystem to current project |
+| `adi-ecosystem init --global` | Deploy skills globally (all projects) |
+| `adi-ecosystem init --force` | Re-deploy even if already installed |
+| `adi-ecosystem adapt` | Adapt ecosystem to current project type |
+| `adi-ecosystem enhance` | Run the auto-enhance learning cycle |
+| `adi-ecosystem status` | Show ecosystem status |
+| `adi-ecosystem list` | Browse all 86 skills |
+| `adi-ecosystem remove` | Remove ecosystem from current project |
+| `adi-ecosystem uninstall` | Remove CLI and all data from system |
 
 ## What Gets Deployed
 
 | Component | Location | Count |
 |-----------|----------|-------|
-| Skills | `.claude/skills/` | 86 |
-| Commands | `.claude/commands/project/` | 15 |
-| Hooks | `.claude/hooks/` | 13 |
-| Settings | `.claude/settings.local.json` | 1 |
-| CLAUDE.md | `./CLAUDE.md` | auto-generated |
-| Ecosystem state | `.claude/ecosystem/` | 1 |
+| Skills | `.claude/skills/` | 86 (autoDev-prefixed) |
+| Commands | `.claude/commands/` | 22 slash commands |
+| Hooks | `.claude/hooks/` | 11 governance hooks |
+| Auto-Enhance | `.claude/auto-enhance/` | Self-learning meta-skill |
+| Settings | `.claude/settings.local.json` | Permissions + hooks |
+| CLAUDE.md | `./CLAUDE.md` | Auto-generated |
+| Ecosystem State | `.claude/ecosystem/` | Feedback + learning data |
 
-## Auto-Detection
+## Auto-Evolution
 
-`adi-auto-dev init` detects your project:
+Every skill, command, and hook records usage to `feedback.json`. The ecosystem learns from patterns and improves itself over time.
+
+```
+Usage -> feedback.json -> learn.sh -> enhanced skills
+                                  -> adapt.sh -> project-specific config
+```
+
+Run `adi-ecosystem enhance` to trigger a learning cycle manually.
+
+## Project Detection
+
+`adi-ecosystem init` detects your project and configures accordingly:
 
 | Detected | What Configures |
 |----------|----------------|
@@ -65,45 +80,29 @@ Two commands. That's it.
 | `requirements.txt` + Django | `pytest`, `ruff check` |
 | `Cargo.toml` | `cargo test`, `cargo clippy` |
 | `go.mod` | `go test ./...`, `golangci-lint run` |
-| Mixed | Both toolchains |
 
-## Global vs Per-Project
+## Uninstall
 
-**Global** (`--global`): Skills available in ALL projects via `~/.claude/skills/`. No hooks or settings.
+```bash
+# From project
+adi-ecosystem remove
 
-**Per-project** (default `init`): Full ecosystem — skills + commands + hooks + settings + CLAUDE.md. Only in that project.
-
-Recommended: Run `adi-auto-dev init --global` once, then `adi-auto-dev init` in each project for hooks/settings.
+# Remove CLI entirely
+adi-ecosystem uninstall
+```
 
 ## Structure
 
 ```
 adi-ecosystem/
-├── install.sh               # One-time installer
-├── bin/
-│   └── adi-auto-dev         # The CLI binary
-├── adi-skills/              # 86 skill folders
-├── share/
-│   ├── commands/            # Slash commands
-│   ├── hooks/               # Governance hooks
-│   ├── skills/              # Skills (mirror)
-│   └── ecosystem/           # State
-├── auto-dev/                # Additional hooks
-├── settings.json            # Permissions template
-├── README.md                # This file
-└── adapt-command.md         # /adapt command reference
-```
-
-## After Init
-
-```bash
-# Start Claude Code
-claude
-
-# In Claude Code:
-/project:start    # Full session init
-/project:cortex   # Implementation workflow
-/project:health   # Ecosystem health check
+  install.sh          One-time installer
+  bin/adi-ecosystem   The CLI binary
+  skills/             86 autoDev-prefixed skills
+  commands/           22 slash commands
+  hooks/              11 governance hooks
+  auto-enhance/       Self-learning meta-skill
+  settings.json       Permissions template
+  ecosystem/          Feedback state
 ```
 
 ## Requirements
@@ -112,17 +111,6 @@ claude
 - git
 - python3
 - Claude Code CLI
-
-## Uninstall
-
-```bash
-# From project
-adi-auto-dev remove
-
-# Remove CLI itself
-rm ~/.local/bin/adi-auto-dev
-rm -rf ~/.adi-ecosystem
-```
 
 ## License
 

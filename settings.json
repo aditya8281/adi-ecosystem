@@ -9,6 +9,7 @@
       "Skill(*)",
       "WebFetch(*)",
       "NotebookEdit(*)",
+      "WebSearch",
       "mcp__context7__query-docs(*)",
       "mcp__sequential-thinking__sequentialthinking(*)",
       "mcp__playwright__browser_navigate(*)",
@@ -16,9 +17,10 @@
       "mcp__playwright__browser_click(*)",
       "mcp__playwright__browser_type(*)",
       "mcp__playwright__browser_evaluate(*)",
-      "mcp__context-mode_context-mode__ctx_execute(*)",
-      "mcp__context-mode_context-mode__ctx_batch_execute(*)",
-      "mcp__context-mode_context-mode__ctx_search(*)"
+      "mcp__plugin_context-mode_context-mode__ctx_execute(*)",
+      "mcp__plugin_context-mode_context-mode__ctx_batch_execute(*)",
+      "mcp__plugin_context-mode_context-mode__ctx_search(*)",
+      "mcp__plugin_context-mode_context-mode__ctx_execute_file(*)"
     ]
   },
   "hooks": {
@@ -28,7 +30,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/run_hooks.py pre-commit"
+            "command": "python3 .claude/hooks/run_hooks.py pre-commit",
+            "timeout": 30,
+            "statusMessage": "Running governance gate"
           }
         ]
       }
@@ -39,7 +43,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/run_hooks.py onchange"
+            "command": "python3 .claude/hooks/run_hooks.py onchange",
+            "timeout": 15,
+            "statusMessage": "Running quality checks"
           }
         ]
       }
@@ -49,7 +55,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/run_hooks.py pre-push"
+            "command": "python3 .claude/hooks/run_hooks.py pre-push",
+            "timeout": 60,
+            "statusMessage": "Running pre-push checks"
           }
         ]
       }
@@ -59,14 +67,16 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/run_hooks.py pre-merge"
+            "command": "python3 .claude/hooks/run_hooks.py pre-merge",
+            "timeout": 120,
+            "statusMessage": "Running pre-merge validation"
           }
         ]
       }
     ]
   },
   "env": {
-    "CORTEX_ROOT": ".",
+    "ADI_ECOSYSTEM": "active",
     "APP_ENV": "development"
   }
 }
